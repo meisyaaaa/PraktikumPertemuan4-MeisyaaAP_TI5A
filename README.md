@@ -1,9 +1,9 @@
-Nama: Meisya Amelia Putri
-Nim: 2430511002
+Nama: Zaskia Qanita Najiyah
+Nim: 2430511024
 Kelas: 5A
 
 Screenshoot Aplikasi:
-![Tampilan Aplikasi](diary-app/assets/image/Screenshoot diary-app.jpeg)
+c:\Users\meisy\Downloads\SSAN.jpeg
 
 langkah menjalankan proyek:
 - Buka Terminal & Masuk ke Folder Proyek

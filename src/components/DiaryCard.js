@@ -5,17 +5,17 @@ export default function DiaryCard({ title, date, preview, moodImage, moodType })
   const getBorderStyle = () => {
     switch (moodType) {
       case 'calm':
-        return { borderColor: '#10b981', borderWidth: 2 };
+        return { borderColor: '#0a0a0a', borderWidth: 2 };
       case 'excited':
-        return { borderColor: '#00d7f4', borderWidth: 2 };
+        return { borderColor: '#000000', borderWidth: 2 };
       case 'focus':
-        return { borderColor: '#8b5cf6', borderWidth: 2 }; 
+        return { borderColor: '#060606', borderWidth: 2 }; 
       case 'setres':
-        return { borderColor: '#f59e0b', borderWidth: 2 };
+        return { borderColor: '#0a0a0a', borderWidth: 2 };
       case 'relaxed':
-        return { borderColor: '#ec4899', borderWidth: 2 }; 
+        return { borderColor: '#020202', borderWidth: 2 }; 
       default:
-        return { borderColor: '#e5e7eb', borderWidth: 1 };
+        return { borderColor: '#050505', borderWidth: 1 };
     }
   };
 
