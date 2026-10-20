@@ -1,6 +1,6 @@
-Nama: Muhammad Daffa Wicaksono
-Nim: 2430511079
-Kelas: 5B
+Nama: Meisya Amelia Putri
+Nim: 2430511002
+Kelas: 5A
 
 Screenshoot Aplikasi:
 <img width="817" height="1600" alt="ssdiaryapp2" src="https://github.com/user-attachments/assets/4a4db82a-223a-467a-af5f-0fd442477657" />
