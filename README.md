@@ -3,7 +3,9 @@ Nim: 2430511079
 Kelas: 5B
 
 Screenshoot Aplikasi:
-c:\Users\meisy\Downloads\SSAN.jpeg
+<img width="817" height="1600" alt="ssdiaryapp2" src="https://github.com/user-attachments/assets/4a4db82a-223a-467a-af5f-0fd442477657" />
+<img width="813" height="1600" alt="ssdiaryapp1" src="https://github.com/user-attachments/assets/5ebe6b80-59c7-4d75-bf26-a23985b8299b" />
+
 
 langkah menjalankan proyek:
 - Buka Terminal & Masuk ke Folder Proyek
