@@ -1,116 +1,157 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
-import DiaryCard from '../components/DiaryCard';
+import React, { useMemo, useState } from 'react'; 
+import { View, Text, StyleSheet, FlatList } from 'react-native'; 
 
-import BosenImage from '../../assets/moods/Bosen.jpg';
-import happyImage from '../../assets/moods/happy.jpg';
-import malam1Image from '../../assets/moods/malam1.jpg';
-import avatar1 from '../../assets/moods/avatar1.jpg';
-import pagi2Image from '../../assets/moods/pagi2.jpg';
-import nyantaiImage from '../../assets/moods/nyantai.jpg';
+import { COLORS, SPACE, TYPO } from '../styles/tokens'; 
+import DiaryCard from '../components/DiaryCard'; 
+import DiaryDetailModal from '../components/DiaryDetailModal'; 
+import SearchBar from '../components/SearchBar'; 
+import EntryForm from '../components/EntryForm'; 
 
-const diaryEntries = [
-  {
-    id: 1,
-    title: 'malam yang hening',
-    date: '2026-09-06',
-    preview: 'Hari ini aku pulang ngampus tengah malam...',
-    moodImage: malam1Image, 
-    moodType: 'tired',
-  },
-  {
-    id: 2,
-    title: 'Pagi yang Tenang',
-    date: '2025-10-06',
-    preview: 'Hari ini aku bangun pagi dan berjalan kaki. Udara terasa sejuk...',
-    moodImage: pagi2Image, 
-    moodType: 'calm',
-  },
-  {
-    id: 3,
-    title: 'Hari Yang Sangat Happy',
-    date: '2025-01-19',
-    preview: 'Aku Hari Ini Main Sama MY BOYFRIEND, seharian fulll...',
-    moodImage: happyImage, 
-    moodType: 'cheerful',
-  },
-  {
-    id: 4,
-    title: 'Hari yang bosen',
-    date: '2025-10-03',
-    preview: 'Aku Hari Ini Bosen Baget Gatau Mau Ngapain...',
-    moodImage: BosenImage,
-    moodType: 'bored',
-  },
-  {
-    id: 5,
-    title: 'Akhir Pekan Santai',
-    date: '2025-10-02',
-    preview: 'Menghabiskan waktu dikamar dan menonton film...',
-    moodImage: nyantaiImage,
-    moodType: 'bored',
-  },
-];
+const INITIAL_ENTRIES = [ 
+  { 
+    id: 1, 
+    title: 'Pagi Yang Sibuk', 
+    date: '2026-10-20', 
+    preview: 'Di hari selasa pagi ini aku bener-bener sibuk banget.', 
+    body: 'Hari ini aku bangun lebih pagi untuk chek-up medis dan masuk poli jiwa untuk cek kesehatan mental.', 
+    moodImage: require('../../assets/moods/paprs.jpg'), // Pastikan file ini ada
+  }, 
+  { 
+    id: 2, 
+    title: 'Siang di Kampus', 
+    date: '2026-10-20', 
+    preview: 'Datang ke kampus buat beli makan dan ngampus.', 
+    body: 'Setelah cek medis, aku langsung ke kampus dan ngerjain modul praktikum sama temen-temen.', 
+    moodImage: require('../../assets/moods/kampus.jpg'), 
+  }, 
+  { 
+    id: 3, 
+    title: 'Sore masih sibuk di kampus', 
+    date: '2026-10-20', 
+    preview: 'Rapat Saintek Hearing.', 
+    body: 'Sore itu aku langsung kumpul BEM untuk prokeran Saintek Hearing atau rapat bersama ormawa HMIF.', 
+    moodImage: require('../../assets/moods/rapat.jpg'), 
+  }, 
+   { 
+    id: 4, 
+    title: 'Malam masih sibuk', 
+    date: '2026-10-20', 
+    preview: 'Nugas malam.', 
+    body: 'Malam ini aku masih perlu mengerjakan tugas-tugas baru yang diberikan dosen yang belum selesai di kerjakan.', 
+    moodImage: require('../../assets/moods/ngoding.jpg'), 
+  }, 
+   { 
+    id: 5, 
+    title: 'Rencana Pulang Kampung Hari Jumat', 
+    date: '2026-10-23', 
+    preview: 'Pulang ke rumah untuk istirahat.', 
+    body: 'Jumat nanti aku ada rencana pulang ke rumah untuk istirahat dan acara keliuarga lainnya.', 
+    moodImage: require('../../assets/moods/pulkam.jpg'), 
+  }, 
+]; 
 
-export default function DiaryListScreen() {
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      {/* Section Header dengan Avatar */}
-      <View style={styles.headerContainer}>
-        <View>
-          <Text style={styles.welcomeText}>WELCOME,</Text>
-          <Text style={styles.headerTitle}>Buku Harian Zaskia</Text>
-        </View>
-        <Image
-          source={avatar1} // 
-          style={styles.avatar}
-        />
-      </View>
+export default function DiaryListScreen() { 
+  // STATE UTAMA 
+  const [entries, setEntries] = useState(INITIAL_ENTRIES); 
+  const [query, setQuery] = useState(''); 
+  const [likedIds, setLikedIds] = useState(new Set()); 
+  const [selected, setSelected] = useState(null); 
 
-      {/* Daftar Kartu Diary */}
-      {diaryEntries.map((entry) => (
-        <DiaryCard
-          key={entry.id}
-          title={entry.title}
-          date={entry.date}
-          preview={entry.preview}
-          moodImage={entry.moodImage}
-          moodType={entry.moodType}
-        />
-      ))}
-    </ScrollView>
-  );
-}
+  // DERIVED STATE 
+  const filtered = useMemo(() => { 
+    if (!query.trim()) return entries; 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
+    const q = query.toLowerCase(); 
+
+    return entries.filter((entry) => 
+      entry.title.toLowerCase().includes(q) || 
+      entry.preview.toLowerCase().includes(q) || 
+      entry.date.toLowerCase().includes(q) 
+    ); 
+  }, [entries, query]); 
+
+  const toggleLike = (id) => { 
+    setLikedIds((prev) => { 
+      const next = new Set(prev); 
+
+      if (next.has(id)) { 
+        next.delete(id); 
+      } else { 
+        next.add(id); 
+      } 
+
+      return next; 
+    }); 
+  }; 
+
+  const addEntry = (newEntry) => { 
+    setEntries((prev) => [newEntry, ...prev]); 
+  }; 
+
+  const renderItem = ({ item }) => ( 
+    <View style={styles.cardWrapper}>
+      <DiaryCard 
+        title={item.title} 
+        date={item.date} 
+        preview={item.preview} 
+        moodImage={item.moodImage} 
+        liked={likedIds.has(item.id)} 
+        onToggleLike={() => toggleLike(item.id)} 
+        onPress={() => setSelected(item)} 
+      /> 
+    </View>
+  ); 
+
+  return ( 
+    <View style={styles.container}> 
+      <FlatList 
+        data={filtered} 
+        keyExtractor={(item) => String(item.id)} 
+        renderItem={renderItem} 
+        contentContainerStyle={styles.listContent} 
+        ListHeaderComponent={
+          <>
+            <Text style={styles.header}>Buku Harian</Text> 
+            <EntryForm onSubmit={addEntry} /> 
+            <SearchBar onChange={setQuery} /> 
+          </>
+        }
+        ListEmptyComponent={ 
+          <Text style={styles.empty}>Belum ada entri.</Text> 
+        } 
+      /> 
+
+      <DiaryDetailModal 
+        visible={!!selected} 
+        entry={selected} 
+        onClose={() => setSelected(null)} 
+      /> 
+    </View> 
+  ); 
+} 
+
+const styles = StyleSheet.create({ 
+  container: { 
+    flex: 1, 
+    backgroundColor: COLORS.surface, 
+  }, 
+  header: { 
+    fontSize: TYPO.h1, 
+    fontWeight: '700', 
+    paddingHorizontal: SPACE.l, 
+    paddingTop: SPACE.l, 
+    color: COLORS.text, 
+  }, 
+  listContent: { 
+    paddingBottom: SPACE.l, 
+  }, 
+  cardWrapper: {
+    paddingHorizontal: SPACE.l,
+    marginBottom: SPACE.m,
   },
-  content: {
-    padding: 16,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 8,
-  },
-  welcomeText: {
-    fontSize: 14,
-    color: '#7894cc',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#111827',
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 2,
-    borderColor: '#e378d3',
-  },
+  empty: { 
+    textAlign: 'center', 
+    color: COLORS.muted, 
+    marginTop: 40, 
+  }, 
 });

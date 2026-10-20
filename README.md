@@ -1,6 +1,6 @@
-Nama: Zaskia Qanita Najiyah
-Nim: 2430511024
-Kelas: 5A
+Nama: Muhammad Daffa Wicaksono
+Nim: 2430511079
+Kelas: 5B
 
 Screenshoot Aplikasi:
 c:\Users\meisy\Downloads\SSAN.jpeg
